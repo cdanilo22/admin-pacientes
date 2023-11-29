@@ -3,9 +3,6 @@
     import {ref} from 'vue'
     const nombre = ref('')
 
-    const leerNombre = e => {
-        nombre.value = e.target.value
-    }
 </script>
 <template>
     <div class="md:w-1/2">
