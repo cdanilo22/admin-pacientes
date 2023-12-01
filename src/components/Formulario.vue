@@ -9,7 +9,7 @@
         mensaje: ''
     })
 
-    defineEmits(['update:nombre','update:email','update:alta','update:propietario','update:sintomas'])
+   const emit = defineEmits(['update:nombre','update:email','update:alta','update:propietario','update:sintomas','guardar-paciente'])
 
     const props = defineProps({
         nombre:{
@@ -39,6 +39,8 @@
             alerta.tipo = 'error'
             return
         }  
+
+        emit('guardar-paciente')
         
     }
 
@@ -168,7 +170,6 @@
                 type="submit"
                 class="mt-3 bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor pointer transition-colors"
                 value="Registrar Paciente"
-             
                 />
 
             </div>
