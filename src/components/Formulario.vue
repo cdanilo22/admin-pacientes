@@ -3,21 +3,38 @@
     import {reactive} from 'vue'
     import Alerta from './Alerta.vue'
 
+
     const alerta = reactive({
         tipo: '',
         mensaje: ''
     })
 
-    const paciente = reactive({
-        nombre: '',
-        propietario: '',
-        email: '',
-        alta:'',
-        sintomas:''
+    defineEmits(['update:nombre','update:email','update:alta','update:propietario','update:sintomas'])
+
+    const props = defineProps({
+        nombre:{
+            type: String,
+            required: true
+        },
+        email:{
+            type: String,
+            required: true
+        },
+        alta:{
+
+        },
+        propietario:{
+            type: String,
+            required: true
+        },
+        sintomas: {
+            type: String,
+            required: true
+        }
     })
 
     const validar = () => {
-        if(Object.values(paciente).includes('')){
+        if(Object.values(props).includes('')){
             alerta.mensaje = 'Todos los campos son obligatorios'
             alerta.tipo = 'error'
             return
@@ -45,9 +62,8 @@
         @submit.prevent="validar"
         >
 
-        {{ paciente.nombre }}
+     
         <div class="mb-5">
-
             <label 
                 for="mascota"
                 class="block text-gray-700 uppercase font-bold"
@@ -60,7 +76,8 @@
                 type="text"
                 placeholder="Nombre de la mascota"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                v-model="paciente.nombre"
+                :value="nombre"
+                @input="$emit('update:nombre', $event.target.value)"
                 />
 
 
@@ -80,7 +97,8 @@
             type="text"
             placeholder="Nombre del propietario"
             class="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-            v-model="paciente.propietario"
+            :value="propietario"
+            @input="$emit('update:propietario', $event.target.value)"
             />
 
 
@@ -101,7 +119,8 @@
             type="email"
             placeholder="Email del propietario"
             class="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-            v-model="paciente.email"
+            :value="email"
+            @input="$emit('update:email', $event.target.value)"
             />
 
 
@@ -121,7 +140,8 @@
                 type="date"
                 placeholder="Email del propietario"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                v-model="paciente.alta"
+                :value="alta"
+                @input="$emit('update:alta', $event.target.value)"
                 />
 
 
@@ -140,7 +160,8 @@
                 id="sintomas"
                 placeholder="Describe los síntomas"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                v-model="paciente.sintomas"
+                :value="sintomas"
+                @input="$emit('update:sintomas', $event.target.value)"
                 />
 
             <input 
@@ -157,5 +178,3 @@
     </div>
  
 </template>
-
-
