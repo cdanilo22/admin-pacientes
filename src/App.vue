@@ -1,5 +1,6 @@
 <script setup>
   import {ref,reactive} from 'vue';
+  import {uid} from 'uid'
   import Header from './components/Header.vue';
   import Formulario from './components/Formulario.vue';
   import Paciente from './components/Paciente.vue'
@@ -7,6 +8,7 @@
   const pacientes = ref([])
 
   const paciente = reactive({
+        id: null,
         nombre: '',
         propietario: '',
         email: '',
@@ -15,9 +17,18 @@
     })
 
     const guardarPaciente = () => {
-      pacientes.value.push({
-          ...paciente
+      if(paciente.id){
+        const {id} = paciente
+        const i = pacientes.value.findIndex(paciente => paciente.id === id )
+        pacientes.value[i] = {...paciente}
+      } else{
+        pacientes.value.push({
+          ...paciente,
+          id: uid()
       })
+      }
+
+ 
       
       //Reiniciar el objeto forma #1
       // paciente.nombre = ''
@@ -32,13 +43,22 @@
         propietario: '',
         email: '',
         alta:'',
-        sintomas:''
+        sintomas:'',
+        id: null
     })
 
 
     }
 
+    const actualizarPaciente = (id) => {
+        const pacienteEditar = pacientes.value.filter(paciente => paciente.id === id) [0]
+        Object.assign(paciente, pacienteEditar)
+    
+      }
 
+      const eliminarPaciente = (id) => {
+        pacientes.value = pacientes.value.filter(paciente => paciente.id !== id)
+      }
 
 </script>
 
@@ -57,6 +77,8 @@
       v-model:alta="paciente.alta"
       v-model:sintomas="paciente.sintomas"
       @guardar-paciente = guardarPaciente
+
+      :id="paciente.id"
      />
  
      <div class="md:w-1/2 md:h-screen overflow-y-scroll">
@@ -69,7 +91,8 @@
         <Paciente
         v-for="paciente in pacientes"
         :paciente="paciente"
-        
+        @actualizar-paciente ='actualizarPaciente'
+        @eliminar-paciente = 'eliminarPaciente'
         />
  
        </div>
