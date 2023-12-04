@@ -1,5 +1,5 @@
 <script setup>
-  import {ref,reactive} from 'vue';
+  import {ref,reactive, onMounted, watch} from 'vue';
   import {uid} from 'uid'
   import Header from './components/Header.vue';
   import Formulario from './components/Formulario.vue';
@@ -16,6 +16,24 @@
         sintomas:''
     })
 
+    watch(pacientes, ()=> {
+      guardarLocalStorage();
+    },{
+        deep: true
+    })
+
+    onMounted(()=> {
+      const pacienteStorage = localStorage.getItem('pacientes')
+      if(pacienteStorage) {
+        pacientes.value = JSON.parse(pacienteStorage)
+      }
+    })
+
+
+    const guardarLocalStorage = () => {
+      localStorage.setItem('pacientes', JSON.stringify(pacientes.value))
+    }
+
     const guardarPaciente = () => {
       if(paciente.id){
         const {id} = paciente
@@ -28,7 +46,7 @@
       })
       }
 
- 
+      guardarLocalStorage();
       
       //Reiniciar el objeto forma #1
       // paciente.nombre = ''
